@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stranger Things - Fan Page</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Beon:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #0f0f0f;
+            --text-primary: #ffffff;
+            --text-secondary: #9ca3af;
+            --stranger-red: #e62429;
+            --stranger-red-glow: #ff3b3f;
+            --upside-down-teal: #00d4aa;
+            --border-subtle: rgba(255, 255, 255, 0.04);
+            --border-light: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Ambient background effects */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(230, 36, 41, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(0, 212, 170, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Floating particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: rgba(230, 36, 41, 0.4);
+            border-radius: 50%;
+            animation: float 15s infinite;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 18s; }
+        .particle:nth-child(2) { left: 20%; animation-delay: 2s; animation-duration: 22s; }
+        .particle:nth-child(3) { left: 30%; animation-delay: 4s; animation-duration: 20s; }
+        .particle:nth-child(4) { left: 40%; animation-delay: 1s; animation-duration: 25s; }
+        .particle:nth-child(5) { left: 50%; animation-delay: 3s; animation-duration: 19s; }
+        .particle:nth-child(6) { left: 60%; animation-delay: 5s; animation-duration: 21s; }
+        .particle:nth-child(7) { left: 70%; animation-delay: 2s; animation-duration: 23s; }
+        .particle:nth-child(8) { left: 80%; animation-delay: 4s; animation-duration: 17s; }
+        .particle:nth-child(9) { left: 90%; animation-delay: 1s; animation-duration: 24s; }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1);
+                opacity: 0;
+            }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 24px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        .series-tag {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(230, 36, 41, 0.1);
+            border: 1px solid rgba(230, 36, 41, 0.3);
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--stranger-red);
+            margin-bottom: 24px;
+            backdrop-filter: blur(10px);
+        }
+
+        .main-title {
+            font-size: 72px;
+            font-weight: 700;
+            letter-spacing: -2px;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            background: linear-gradient(180deg, var(--stranger-red) 0%, var(--stranger-red-glow) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 60px rgba(230, 36, 41, 0.5);
+            animation: titleGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes titleGlow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.2); }
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: var(--text-secondary);
+            font-weight: 400;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+        }
+
+        /* Content sections */
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 60px;
+        }
+
+        /* Episode cards */
+        .section-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 32px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: var(--stranger-red);
+        }
+
+        .episodes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+
+        .episode-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 28px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .episode-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--stranger-red), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .episode-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--border-light);
+            box-shadow: 0 12px 40px rgba(230, 36, 41, 0.15);
+        }
+
+        .episode-card:hover::before {
+            opacity: 1;
+        }
+
+        .episode-number {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: var(--stranger-red);
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .episode-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .episode-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Characters section */
+        .characters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .character-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .character-card:hover {
+            border-color: var(--stranger-red);
+            transform: scale(1.02);
+        }
+
+        .character-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--stranger-red), var(--upside-down-teal));
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+        }
+
+        .character-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .character-role {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* Quote section */
+        .quote-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 16px;
+            padding: 48px;
+            text-align: center;
+            position: relative;
+            margin-top: 40px;
+        }
+
+        .quote-text {
+            font-size: 24px;
+            font-style: italic;
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .quote-text::before,
+        .quote-text::after {
+            content: '"';
+            font-size: 48px;
+            color: var(--stranger-red);
+            opacity: 0.3;
+            position: absolute;
+        }
+
+        .quote-text::before {
+            top: -20px;
+            left: -20px;
+        }
+
+        .quote-text::after {
+            bottom: -40px;
+            right: -20px;
+        }
+
+        .quote-author {
+            font-size: 14px;
+            color: var(--stranger-red);
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            margin-top: 60px;
+            border-top: 1px solid var(--border-subtle);
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .fan-badge {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(230, 36, 41, 0.1);
+            border: 1px solid rgba(230, 36, 41, 0.3);
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--stranger-red);
+            margin-bottom: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 42px;
+            }
+
+            .subtitle {
+                font-size: 14px;
+            }
+
+            .container {
+                padding: 40px 16px;
+            }
+
+            .quote-section {
+                padding: 32px 24px;
+            }
+
+            .quote-text {
+                font-size: 18px;
+            }
+
+            .quote-text::before,
+            .quote-text::after {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <span class="series-tag">Netflix Original Series</span>
+            <h1 class="main-title">Stranger Things</h1>
+            <p class="subtitle">A Fan-Made Tribute</p>
+        </header>
+
+        <div class="content">
+            <!-- Episodes Section -->
+            <section>
+                <h2 class="section-title">Featured Episodes</h2>
+                <div class="episodes-grid">
+                    <div class="episode-card">
+                        <div class="episode-number">Season 1 • Episode 1</div>
+                        <h3 class="episode-title">The Vanishing of Will Byers</h3>
+                        <p class="episode-desc">On his way home from a friend's house, young Will sees something terrifying. Nearby, a secret government lab prepares for something even worse.</p>
+                    </div>
+                    <div class="episode-card">
+                        <div class="episode-number">Season 2 • Episode 9</div>
+                        <h3 class="episode-title">The Gate</h3>
+                        <p class="episode-desc">Eleven makes plans to finish what she started while the survivors turn up the heat on the monstrous force that holds Will hostage.</p>
+                    </div>
+                    <div class="episode-card">
+                        <div class="episode-number">Season 3 • Episode 8</div>
+                        <h3 class="episode-title">The Battle of Starcourt</h3>
+                        <p class="episode-desc">Terror reigns in the food court when the Mind Flayer comes to collect. But down below, in the dark, the future of the world is at stake.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Characters Section -->
+            <section>
+                <h2 class="section-title">Main Characters</h2>
+                <div class="characters-grid">
+                    <div class="character-card">
+                        <div class="character-icon">👧</div>
+                        <div class="character-name">Eleven</div>
+                        <div class="character-role">The Psychic Hero</div>
+                    </div>
+                    <div class="character-card">
+                        <div class="character-icon">👦</div>
+                        <div class="character-name">Mike Wheeler</div>
+                        <div class="character-role">The Leader</div>
+                    </div>
+                    <div class="character-card">
+                        <div class="character-icon">🚲</div>
+                        <div class="character-name">Dustin Henderson</div>
+                        <div class="character-role">The Smart One</div>
+                    </div>
+                    <div class="character-card">
+                        <div class="character-icon">🎸</div>
+                        <div class="character-name">Will Byers</div>
+                        <div class="character-role">The Survivor</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quote Section -->
+            <section class="quote-section">
+                <p class="quote-text">Friends don't lie.</p>
+                <p class="quote-author">— Eleven</p>
+            </section>
+        </div>
+
+        <footer>
+            <span class="fan-badge">Fan Created</span>
+            <p>Made with ❤️ by a Stranger Things fan</p>
+            <p style="margin-top: 8px; opacity: 0.5;">This is a tribute page. All rights belong to Netflix and the Duffer Brothers.</p>
+        </footer>
+    </div>
+</body>
+</html>

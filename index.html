@@ -1,774 +1,1367 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stranger Things - Fan Page</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Beon:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        :root {
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #0f0f0f;
-            --text-primary: #ffffff;
-            --text-secondary: #9ca3af;
-            --stranger-red: #e62429;
-            --stranger-red-glow: #ff3b3f;
-            --upside-down-teal: #00d4aa;
-            --border-subtle: rgba(255, 255, 255, 0.04);
-            --border-light: rgba(255, 255, 255, 0.08);
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* Ambient background effects */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(ellipse at 20% 50%, rgba(230, 36, 41, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 50%, rgba(0, 212, 170, 0.08) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* Floating particles */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .particle {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background: rgba(230, 36, 41, 0.4);
-            border-radius: 50%;
-            animation: float 15s infinite;
-        }
-
-        .particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 18s; }
-        .particle:nth-child(2) { left: 20%; animation-delay: 2s; animation-duration: 22s; }
-        .particle:nth-child(3) { left: 30%; animation-delay: 4s; animation-duration: 20s; }
-        .particle:nth-child(4) { left: 40%; animation-delay: 1s; animation-duration: 25s; }
-        .particle:nth-child(5) { left: 50%; animation-delay: 3s; animation-duration: 19s; }
-        .particle:nth-child(6) { left: 60%; animation-delay: 5s; animation-duration: 21s; }
-        .particle:nth-child(7) { left: 70%; animation-delay: 2s; animation-duration: 23s; }
-        .particle:nth-child(8) { left: 80%; animation-delay: 4s; animation-duration: 17s; }
-        .particle:nth-child(9) { left: 90%; animation-delay: 1s; animation-duration: 24s; }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(100vh) scale(0);
-                opacity: 0;
-            }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
-            100% {
-                transform: translateY(-100vh) scale(1);
-                opacity: 0;
-            }
-        }
-
-        /* Enter Screen */
-        .enter-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--bg-primary);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
-        }
-
-        .enter-screen.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-
-        .enter-title {
-            font-size: 64px;
-            font-weight: 700;
-            color: var(--stranger-red);
-            text-transform: uppercase;
-            letter-spacing: -2px;
-            margin-bottom: 16px;
-            text-shadow: 0 0 60px rgba(230, 36, 41, 0.5);
-            animation: titleGlow 3s ease-in-out infinite;
-        }
-
-        .enter-subtitle {
-            font-size: 18px;
-            color: var(--text-secondary);
-            margin-bottom: 40px;
-            letter-spacing: 2px;
-        }
-
-        .enter-btn {
-            padding: 16px 48px;
-            background: linear-gradient(135deg, var(--stranger-red), var(--stranger-red-glow));
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 8px 30px rgba(230, 36, 41, 0.4);
-        }
-
-        .enter-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 12px 40px rgba(230, 36, 41, 0.6);
-        }
-
-        .enter-btn:active {
-            transform: scale(0.98);
-        }
-
-        @keyframes titleGlow {
-            0%, 100% { filter: brightness(1); }
-            50% { filter: brightness(1.2); }
-        }
-
-        .container {
-            position: relative;
-            z-index: 1;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 60px 24px;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Audio Controls */
-        .audio-controls {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
-            padding: 12px 20px;
-            backdrop-filter: blur(10px);
-            z-index: 100;
-            transition: all 0.3s ease;
-        }
-
-        .audio-controls:hover {
-            border-color: var(--stranger-red);
-            box-shadow: 0 8px 30px rgba(230, 36, 41, 0.2);
-        }
-
-        .audio-btn {
-            width: 40px;
-            height: 40px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-subtle);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 18px;
-        }
-
-        .audio-btn:hover {
-            background: var(--stranger-red);
-            border-color: var(--stranger-red);
-        }
-
-        .audio-btn.playing {
-            background: var(--stranger-red);
-            border-color: var(--stranger-red);
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(230, 36, 41, 0.4); }
-            50% { box-shadow: 0 0 0 10px rgba(230, 36, 41, 0); }
-        }
-
-        .volume-slider {
-            width: 100px;
-            height: 4px;
-            background: var(--border-subtle);
-            border-radius: 2px;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .volume-fill {
-            height: 100%;
-            background: var(--stranger-red);
-            border-radius: 2px;
-            width: 50%;
-            transition: width 0.2s ease;
-        }
-
-        .audio-label {
-            font-size: 12px;
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-
-        /* Header */
-        header {
-            text-align: center;
-            margin-bottom: 80px;
-            position: relative;
-        }
-
-        .series-tag {
-            display: inline-block;
-            padding: 8px 20px;
-            background: rgba(230, 36, 41, 0.1);
-            border: 1px solid rgba(230, 36, 41, 0.3);
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: var(--stranger-red);
-            margin-bottom: 24px;
-            backdrop-filter: blur(10px);
-        }
-
-        .main-title {
-            font-size: 72px;
-            font-weight: 700;
-            letter-spacing: -2px;
-            line-height: 1.1;
-            margin-bottom: 16px;
-            text-transform: uppercase;
-            background: linear-gradient(180deg, var(--stranger-red) 0%, var(--stranger-red-glow) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-shadow: 0 0 60px rgba(230, 36, 41, 0.5);
-            animation: titleGlow 3s ease-in-out infinite;
-        }
-
-        .subtitle {
-            font-size: 18px;
-            color: var(--text-secondary);
-            font-weight: 400;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-        }
-
-        /* Content sections */
-        .content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 60px;
-        }
-
-        .section-title {
-            font-size: 28px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 32px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 0;
-            width: 60px;
-            height: 2px;
-            background: var(--stranger-red);
-        }
-
-        .episodes-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-        }
-
-        .episode-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-subtle);
-            border-radius: 16px;
-            padding: 28px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .episode-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--stranger-red), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .episode-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--border-light);
-            box-shadow: 0 12px 40px rgba(230, 36, 41, 0.15);
-        }
-
-        .episode-card:hover::before {
-            opacity: 1;
-        }
-
-        .episode-number {
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            color: var(--stranger-red);
-            text-transform: uppercase;
-            margin-bottom: 12px;
-        }
-
-        .episode-title {
-            font-size: 20px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 12px;
-            line-height: 1.3;
-        }
-
-        .episode-desc {
-            font-size: 14px;
-            color: var(--text-secondary);
-            line-height: 1.6;
-        }
-
-        /* Characters section */
-        .characters-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-        }
-
-        .character-card {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-subtle);
-            border-radius: 12px;
-            padding: 24px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .character-card:hover {
-            border-color: var(--stranger-red);
-            transform: scale(1.02);
-        }
-
-        .character-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--stranger-red), var(--upside-down-teal));
-            border-radius: 50%;
-            margin: 0 auto 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-        }
-
-        .character-name {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 4px;
-        }
-
-        .character-role {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        /* Quote section */
-        .quote-section {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-subtle);
-            border-radius: 16px;
-            padding: 48px;
-            text-align: center;
-            position: relative;
-            margin-top: 40px;
-        }
-
-        .quote-text {
-            font-size: 24px;
-            font-style: italic;
-            color: var(--text-primary);
-            line-height: 1.6;
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .quote-text::before,
-        .quote-text::after {
-            content: '"';
-            font-size: 48px;
-            color: var(--stranger-red);
-            opacity: 0.3;
-            position: absolute;
-        }
-
-        .quote-text::before {
-            top: -20px;
-            left: -20px;
-        }
-
-        .quote-text::after {
-            bottom: -40px;
-            right: -20px;
-        }
-
-        .quote-author {
-            font-size: 14px;
-            color: var(--stranger-red);
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 40px 0;
-            margin-top: 60px;
-            border-top: 1px solid var(--border-subtle);
-            color: var(--text-secondary);
-            font-size: 13px;
-        }
-
-        .fan-badge {
-            display: inline-block;
-            padding: 6px 16px;
-            background: rgba(230, 36, 41, 0.1);
-            border: 1px solid rgba(230, 36, 41, 0.3);
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: var(--stranger-red);
-            margin-bottom: 12px;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .main-title {
-                font-size: 42px;
-            }
-
-            .subtitle {
-                font-size: 14px;
-            }
-
-            .container {
-                padding: 40px 16px;
-            }
-
-            .quote-section {
-                padding: 32px 24px;
-            }
-
-            .quote-text {
-                font-size: 18px;
-            }
-
-            .quote-text::before,
-            .quote-text::after {
-                display: none;
-            }
-
-            .enter-title {
-                font-size: 42px;
-            }
-
-            .audio-controls {
-                bottom: 20px;
-                right: 20px;
-                padding: 10px 16px;
-            }
-
-            .volume-slider {
-                width: 80px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <!-- Audio Elements -->
-    <audio id="bg-music" loop>
-        <source src="https://cdn.pixabay.com/download/audio/2022/10/05/audio_674cafc9f8.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-
-    <audio id="sfx-hover">
-        <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7a2c8b8e8e.mp3" type="audio/mpeg">
-    </audio>
-
-    <audio id="sfx-click">
-        <source src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_c8a3e8e8e8.mp3" type="audio/mpeg">
-    </audio>
-
-    <!-- Floating Particles -->
-    <div class="particles">
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-        <div class="particle"></div>
-    </div>
-
-    <!-- Enter Screen -->
-    <div class="enter-screen" id="enter-screen">
-        <h1 class="enter-title">Stranger Things</h1>
-        <p class="enter-subtitle">Enter the Upside Down</p>
-        <button class="enter-btn" id="enter-btn">
-            🎵 Enter with Music
-        </button>
-    </div>
-
-    <!-- Audio Controls -->
-    <div class="audio-controls">
-        <div class="audio-btn" id="play-pause-btn" title="Play/Pause">
-            ▶️
-        </div>
-        <span class="audio-label">Music</span>
-        <div class="volume-slider" id="volume-slider">
-            <div class="volume-fill" id="volume-fill"></div>
-        </div>
-    </div>
-
-    <div class="container">
-        <header>
-            <span class="series-tag">Netflix Original Series</span>
-            <h1 class="main-title">Stranger Things</h1>
-            <p class="subtitle">A Fan-Made Tribute</p>
-        </header>
-
-        <div class="content">
-            <!-- Episodes Section -->
-            <section>
-                <h2 class="section-title">Featured Episodes</h2>
-                <div class="episodes-grid">
-                    <div class="episode-card">
-                        <div class="episode-number">Season 1 • Episode 1</div>
-                        <h3 class="episode-title">The Vanishing of Will Byers</h3>
-                        <p class="episode-desc">On his way home from a friend's house, young Will sees something terrifying. Nearby, a secret government lab prepares for something even worse.</p>
-                    </div>
-                    <div class="episode-card">
-                        <div class="episode-number">Season 2 • Episode 9</div>
-                        <h3 class="episode-title">The Gate</h3>
-                        <p class="episode-desc">Eleven makes plans to finish what she started while the survivors turn up the heat on the monstrous force that holds Will hostage.</p>
-                    </div>
-                    <div class="episode-card">
-                        <div class="episode-number">Season 3 • Episode 8</div>
-                        <h3 class="episode-title">The Battle of Starcourt</h3>
-                        <p class="episode-desc">Terror reigns in the food court when the Mind Flayer comes to collect. But down below, in the dark, the future of the world is at stake.</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Characters Section -->
-            <section>
-                <h2 class="section-title">Main Characters</h2>
-                <div class="characters-grid">
-                    <div class="character-card">
-                        <div class="character-icon">👧</div>
-                        <div class="character-name">Eleven</div>
-                        <div class="character-role">The Psychic Hero</div>
-                    </div>
-                    <div class="character-card">
-                        <div class="character-icon">👦</div>
-                        <div class="character-name">Mike Wheeler</div>
-                        <div class="character-role">The Leader</div>
-                    </div>
-                    <div class="character-card">
-                        <div class="character-icon">🚲</div>
-                        <div class="character-name">Dustin Henderson</div>
-                        <div class="character-role">The Smart One</div>
-                    </div>
-                    <div class="character-card">
-                        <div class="character-icon">🎸</div>
-                        <div class="character-name">Will Byers</div>
-                        <div class="character-role">The Survivor</div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Quote Section -->
-            <section class="quote-section">
-                <p class="quote-text">Friends don't lie.</p>
-                <p class="quote-author">— Eleven</p>
-            </section>
-        </div>
-
-        <footer>
-            <span class="fan-badge">Fan Created</span>
-            <p>Made with ❤️ by a Stranger Things fan</p>
-            <p style="margin-top: 8px; opacity: 0.5;">This is a tribute page. All rights belong to Netflix and the Duffer Brothers.</p>
-        </footer>
-    </div>
-
-    <script>
-        // Audio elements
-        const bgMusic = document.getElementById('bg-music');
-        const sfxHover = document.getElementById('sfx-hover');
-        const sfxClick = document.getElementById('sfx-click');
-        const playPauseBtn = document.getElementById('play-pause-btn');
-        const volumeSlider = document.getElementById('volume-slider');
-        const volumeFill = document.getElementById('volume-fill');
-        const enterScreen = document.getElementById('enter-screen');
-        const enterBtn = document.getElementById('enter-btn');
-
-        let isPlaying = false;
-        let volume = 0.5;
-
-        // Initialize volume
-        bgMusic.volume = volume;
-        volumeFill.style.width = (volume * 100) + '%';
-
-        // Enter screen - start music on user interaction
-        enterBtn.addEventListener('click', () => {
-            playMusic();
-            enterScreen.classList.add('hidden');
-            
-            // Play subtle enter sound
-            sfxClick.volume = 0.3;
-            sfxClick.play().catch(() => {});
-        });
-
-        // Play/Pause toggle
-        playPauseBtn.addEventListener('click', () => {
-            if (isPlaying) {
-                pauseMusic();
-            } else {
-                playMusic();
-            }
-            playSoundEffect(sfxClick, 0.3);
-        });
-
-        function playMusic() {
-            bgMusic.play().then(() => {
-                isPlaying = true;
-                playPauseBtn.textContent = '⏸️';
-                playPauseBtn.classList.add('playing');
-            }).catch(error => {
-                console.log('Audio playback failed:', error);
-            });
-        }
-
-        function pauseMusic() {
-            bgMusic.pause();
-            isPlaying = false;
-            playPauseBtn.textContent = '▶️';
-            playPauseBtn.classList.remove('playing');
-        }
-
-        // Volume control
-        volumeSlider.addEventListener('click', (e) => {
-            const rect = volumeSlider.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const percentage = Math.max(0, Math.min(1, x / rect.width));
-            volume = percentage;
-            bgMusic.volume = volume;
-            volumeFill.style.width = (volume * 100) + '%';
-            playSoundEffect(sfxClick, 0.3);
-        });
-
-        // Sound effects on card interactions
-        document.querySelectorAll('.episode-card, .character-card, .enter-btn, .audio-btn').forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                playSoundEffect(sfxHover, 0.15);
-            });
-        });
-
-        function playSoundEffect(audioElement, vol) {
-            audioElement.currentTime = 0;
-            audioElement.volume = vol;
-            audioElement.play().catch(() => {});
-        }
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space' && !enterScreen.classList.contains('hidden')) {
-                e.preventDefault();
-                enterBtn.click();
-            } else if (e.code === 'Space' && enterScreen.classList.contains('hidden')) {
-                e.preventDefault();
-                playPauseBtn.click();
-            } else if (e.code === 'ArrowUp') {
-                e.preventDefault();
-                volume = Math.min(1, volume + 0.1);
-                bgMusic.volume = volume;
-                volumeFill.style.width = (volume * 100) + '%';
-            } else if (e.code === 'ArrowDown') {
-                e.preventDefault();
-                volume = Math.max(0, volume - 0.1);
-                bgMusic.volume = volume;
-                volumeFill.style.width = (volume * 100) + '%';
-            }
-        });
-
-        // Visual feedback for audio state
-        bgMusic.addEventListener('play', () => {
-            playPauseBtn.classList.add('playing');
-        });
-
-        bgMusic.addEventListener('pause', () => {
-            playPauseBtn.classList.remove('playing');
-        });
-    </script>
-</body>
-</html>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Stranger Things - Official Fan Tribute | Hawkins, Indiana</title>
+ <meta name="description" content="A fan-made tribute to Stranger Things. Explore episodes, characters, iconic quotes, and the eerie world of Hawkins, Indiana from the Netflix Original Series.">
+ <meta name="keywords" content="Stranger Things, Netflix, Hawkins, Eleven, Mike, Dustin, Lucas, Will, Upside Down, tribute, fan page">
+ <meta name="author" content="Stranger Things Fan">
+ <meta property="og:title" content="Stranger Things - Fan Tribute">
+ <meta property="og:description" content="Explore the world of Stranger Things. Episodes, characters, and iconic moments from Hawkins, Indiana.">
+ <meta property="og:type" content="website">
+ <meta property="og:url" content="https://kameshaether.github.io/stranger-things-tribute/">
+ <meta property="og:image" content="https://kameshaether.github.io/stranger-things-tribute/og-image.png">
+ <meta name="twitter:card" content="summary_large_image">
+ <meta name="twitter:title" content="Stranger Things - Fan Tribute">
+ <meta name="twitter:description" content="Explore the world of Stranger Things. Episodes, characters, and iconic moments.">
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Beon:wght@400;700&display=swap" rel="stylesheet">
+ <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%23e62429'>👁️</text></svg>">
+ <style>
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+
+ :root {
+ --bg-primary: #0a0a0a;
+ --bg-secondary: #0f0f0f;
+ --bg-tertiary: #141414;
+ --text-primary: #ffffff;
+ --text-secondary: #9ca3af;
+ --stranger-red: #e62429;
+ --stranger-red-glow: #ff3b3f;
+ --upside-down-teal: #00d4aa;
+ --border-subtle: rgba(255, 255, 255, 0.04);
+ --border-light: rgba(255, 255, 255, 0.08);
+ }
+
+ body {
+ font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+ background: var(--bg-primary);
+ color: var(--text-primary);
+ min-height: 100vh;
+ overflow-x: hidden;
+ position: relative;
+ line-height: 1.6;
+ }
+
+ /* Skip link for accessibility */
+ .skip-link {
+ position: absolute;
+ top: -40px;
+ left: 0;
+ background: var(--stranger-red);
+ color: white;
+ padding: 8px 16px;
+ z-index: 10000;
+ text-decoration: none;
+ font-weight: 600;
+ transition: top 0.3s;
+ }
+ .skip-link:focus {
+ top: 0;
+ }
+
+ /* Ambient background effects */
+ body::before {
+ content: '';
+ position: fixed;
+ top: 0;
+ left: 0;
+ right: 0;
+ bottom: 0;
+ background:
+ radial-gradient(ellipse at 20% 50%, rgba(230, 36, 41, 0.08) 0%, transparent 50%),
+ radial-gradient(ellipse at 80% 50%, rgba(0, 212, 170, 0.08) 0%, transparent 50%);
+ pointer-events: none;
+ z-index: 0;
+ }
+
+ /* Floating particles */
+ .particles {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ pointer-events: none;
+ z-index: 0;
+ overflow: hidden;
+ }
+
+ .particle {
+ position: absolute;
+ width: 3px;
+ height: 3px;
+ background: rgba(230, 36, 41, 0.4);
+ border-radius: 50%;
+ animation: float 15s infinite;
+ }
+
+ .particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 18s; }
+ .particle:nth-child(2) { left: 20%; animation-delay: 2s; animation-duration: 22s; }
+ .particle:nth-child(3) { left: 30%; animation-delay: 4s; animation-duration: 20s; }
+ .particle:nth-child(4) { left: 40%; animation-delay: 1s; animation-duration: 25s; }
+ .particle:nth-child(5) { left: 50%; animation-delay: 3s; animation-duration: 19s; }
+ .particle:nth-child(6) { left: 60%; animation-delay: 5s; animation-duration: 21s; }
+ .particle:nth-child(7) { left: 70%; animation-delay: 2s; animation-duration: 23s; }
+ .particle:nth-child(8) { left: 80%; animation-delay: 4s; animation-duration: 17s; }
+ .particle:nth-child(9) { left: 90%; animation-delay: 1s; animation-duration: 24s; }
+
+ @keyframes float {
+ 0%, 100% {
+ transform: translateY(100vh) scale(0);
+ opacity: 0;
+ }
+ 10% { opacity: 1; }
+ 90% { opacity: 1; }
+ 100% {
+ transform: translateY(-100vh) scale(1);
+ opacity: 0;
+ }
+ }
+
+ /* Navigation */
+ .main-nav {
+ position: fixed;
+ top: 0;
+ left: 0;
+ right: 0;
+ z-index: 999;
+ background: rgba(10, 10, 10, 0.85);
+ backdrop-filter: blur(10px);
+ border-bottom: 1px solid var(--border-subtle);
+ padding: 16px 24px;
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ transition: all 0.3s ease;
+ }
+
+ .nav-brand {
+ font-family: 'Beon', sans-serif;
+ font-size: 20px;
+ font-weight: 700;
+ color: var(--stranger-red);
+ text-transform: uppercase;
+ letter-spacing: 2px;
+ text-decoration: none;
+ }
+
+ .nav-links {
+ display: flex;
+ gap: 24px;
+ list-style: none;
+ }
+
+ .nav-links a {
+ color: var(--text-secondary);
+ text-decoration: none;
+ font-size: 14px;
+ font-weight: 500;
+ letter-spacing: 1px;
+ text-transform: uppercase;
+ transition: color 0.3s ease;
+ position: relative;
+ }
+
+ .nav-links a:hover,
+ .nav-links a:focus {
+ color: var(--stranger-red);
+ outline: none;
+ }
+
+ .nav-links a::after {
+ content: '';
+ position: absolute;
+ bottom: -4px;
+ left: 0;
+ width: 0;
+ height: 2px;
+ background: var(--stranger-red);
+ transition: width 0.3s ease;
+ }
+
+ .nav-links a:hover::after,
+ .nav-links a:focus::after {
+ width: 100%;
+ }
+
+ .mobile-menu-toggle {
+ display: none;
+ background: none;
+ border: none;
+ color: var(--text-primary);
+ font-size: 24px;
+ cursor: pointer;
+ padding: 8px;
+ }
+
+ @media (max-width: 768px) {
+ .nav-links {
+ display: none;
+ position: absolute;
+ top: 100%;
+ left: 0;
+ right: 0;
+ background: rgba(10, 10, 10, 0.95);
+ flex-direction: column;
+ padding: 20px;
+ gap: 16px;
+ border-bottom: 1px solid var(--border-subtle);
+ }
+
+ .nav-links.active {
+ display: flex;
+ }
+
+ .mobile-menu-toggle {
+ display: block;
+ }
+ }
+
+ /* Enter Screen */
+ .enter-screen {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background: var(--bg-primary);
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+ z-index: 1000;
+ transition: opacity 0.8s ease, visibility 0.8s ease;
+ }
+
+ .enter-screen.hidden {
+ opacity: 0;
+ visibility: hidden;
+ pointer-events: none;
+ }
+
+ .enter-title {
+ font-family: 'Beon', sans-serif;
+ font-size: 64px;
+ font-weight: 700;
+ color: var(--stranger-red);
+ text-transform: uppercase;
+ letter-spacing: -2px;
+ margin-bottom: 16px;
+ text-shadow: 0 0 60px rgba(230, 36, 41, 0.5);
+ animation: titleGlow 3s ease-in-out infinite;
+ }
+
+ .enter-subtitle {
+ font-size: 18px;
+ color: var(--text-secondary);
+ margin-bottom: 40px;
+ letter-spacing: 2px;
+ text-transform: uppercase;
+ }
+
+ .enter-btn {
+ padding: 16px 48px;
+ background: linear-gradient(135deg, var(--stranger-red), var(--stranger-red-glow));
+ border: none;
+ border-radius: 12px;
+ color: white;
+ font-size: 16px;
+ font-weight: 600;
+ letter-spacing: 1px;
+ text-transform: uppercase;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ box-shadow: 0 8px 30px rgba(230, 36, 41, 0.4);
+ font-family: inherit;
+ }
+
+ .enter-btn:hover {
+ transform: scale(1.05);
+ box-shadow: 0 12px 40px rgba(230, 36, 41, 0.6);
+ }
+
+ .enter-btn:active {
+ transform: scale(0.98);
+ }
+
+ .enter-btn:focus {
+ outline: 2px solid var(--upside-down-teal);
+ outline-offset: 2px;
+ }
+
+ @keyframes titleGlow {
+ 0%, 100% { filter: brightness(1); }
+ 50% { filter: brightness(1.2); }
+ }
+
+ .container {
+ position: relative;
+ z-index: 1;
+ max-width: 1200px;
+ margin: 0 auto;
+ padding: 100px 24px 60px;
+ min-height: 100vh;
+ display: flex;
+ flex-direction: column;
+ }
+
+ /* Audio Controls */
+ .audio-controls {
+ position: fixed;
+ bottom: 30px;
+ right: 30px;
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ background: var(--bg-secondary);
+ border: 1px solid var(--border-light);
+ border-radius: 12px;
+ padding: 12px 20px;
+ backdrop-filter: blur(10px);
+ z-index: 100;
+ transition: all 0.3s ease;
+ }
+
+ .audio-controls:hover {
+ border-color: var(--stranger-red);
+ box-shadow: 0 8px 30px rgba(230, 36, 41, 0.2);
+ }
+
+ .audio-btn {
+ width: 40px;
+ height: 40px;
+ background: var(--bg-tertiary);
+ border: 1px solid var(--border-subtle);
+ border-radius: 8px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ cursor: pointer;
+ transition: all 0.2s ease;
+ font-size: 18px;
+ background: none;
+ color: inherit;
+ }
+
+ .audio-btn:hover {
+ background: var(--stranger-red);
+ border-color: var(--stranger-red);
+ }
+
+ .audio-btn.playing {
+ background: var(--stranger-red);
+ border-color: var(--stranger-red);
+ animation: pulse 1.5s infinite;
+ }
+
+ .audio-btn:focus {
+ outline: 2px solid var(--upside-down-teal);
+ outline-offset: 2px;
+ }
+
+ @keyframes pulse {
+ 0%, 100% { box-shadow: 0 0 0 0 rgba(230, 36, 41, 0.4); }
+ 50% { box-shadow: 0 0 0 10px rgba(230, 36, 41, 0); }
+ }
+
+ .volume-slider {
+ width: 100px;
+ height: 4px;
+ background: var(--border-subtle);
+ border-radius: 2px;
+ cursor: pointer;
+ position: relative;
+ }
+
+ .volume-fill {
+ height: 100%;
+ background: var(--stranger-red);
+ border-radius: 2px;
+ width: 50%;
+ transition: width 0.2s ease;
+ }
+
+ .audio-label {
+ font-size: 12px;
+ color: var(--text-secondary);
+ font-weight: 500;
+ }
+
+ /* Header */
+ header {
+ text-align: center;
+ margin-bottom: 80px;
+ position: relative;
+ padding-top: 40px;
+ }
+
+ .series-tag {
+ display: inline-block;
+ padding: 8px 20px;
+ background: rgba(230, 36, 41, 0.1);
+ border: 1px solid rgba(230, 36, 41, 0.3);
+ border-radius: 20px;
+ font-size: 12px;
+ font-weight: 600;
+ letter-spacing: 2px;
+ text-transform: uppercase;
+ color: var(--stranger-red);
+ margin-bottom: 24px;
+ backdrop-filter: blur(10px);
+ }
+
+ .main-title {
+ font-family: 'Beon', sans-serif;
+ font-size: 72px;
+ font-weight: 700;
+ letter-spacing: -2px;
+ line-height: 1.1;
+ margin-bottom: 16px;
+ text-transform: uppercase;
+ background: linear-gradient(180deg, var(--stranger-red) 0%, var(--stranger-red-glow) 100%);
+ -webkit-background-clip: text;
+ -webkit-text-fill-color: transparent;
+ background-clip: text;
+ text-shadow: 0 0 60px rgba(230, 36, 41, 0.5);
+ animation: titleGlow 3s ease-in-out infinite;
+ }
+
+ .subtitle {
+ font-size: 18px;
+ color: var(--text-secondary);
+ font-weight: 400;
+ letter-spacing: 3px;
+ text-transform: uppercase;
+ }
+
+ /* Content sections */
+ .content {
+ flex: 1;
+ display: flex;
+ flex-direction: column;
+ gap: 80px;
+ }
+
+ .section-title {
+ font-family: 'Beon', sans-serif;
+ font-size: 32px;
+ font-weight: 700;
+ color: var(--text-primary);
+ margin-bottom: 40px;
+ position: relative;
+ display: inline-block;
+ letter-spacing: 1px;
+ text-transform: uppercase;
+ }
+
+ .section-title::after {
+ content: '';
+ position: absolute;
+ bottom: -12px;
+ left: 0;
+ width: 80px;
+ height: 3px;
+ background: linear-gradient(90deg, var(--stranger-red), var(--upside-down-teal));
+ }
+
+ .section-title.centered {
+ display: block;
+ text-align: center;
+ }
+
+ .section-title.centered::after {
+ left: 50%;
+ transform: translateX(-50%);
+ }
+
+ .intro-text {
+ font-size: 18px;
+ color: var(--text-secondary);
+ line-height: 1.8;
+ max-width: 800px;
+ margin: 0 auto 60px;
+ text-align: center;
+ }
+
+ /* Episodes Grid */
+ .episodes-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+ gap: 24px;
+ }
+
+ .episode-card {
+ background: var(--bg-secondary);
+ border: 1px solid var(--border-subtle);
+ border-radius: 16px;
+ padding: 28px;
+ transition: all 0.3s ease;
+ position: relative;
+ overflow: hidden;
+ }
+
+ .episode-card::before {
+ content: '';
+ position: absolute;
+ top: 0;
+ left: 0;
+ right: 0;
+ height: 1px;
+ background: linear-gradient(90deg, transparent, var(--stranger-red), transparent);
+ opacity: 0;
+ transition: opacity 0.3s ease;
+ }
+
+ .episode-card:hover {
+ transform: translateY(-4px);
+ border-color: var(--border-light);
+ box-shadow: 0 12px 40px rgba(230, 36, 41, 0.15);
+ }
+
+ .episode-card:hover::before {
+ opacity: 1;
+ }
+
+ .episode-card:focus-within {
+ border-color: var(--upside-down-teal);
+ box-shadow: 0 0 0 2px rgba(0, 212, 170, 0.3);
+ }
+
+ .episode-number {
+ font-size: 12px;
+ font-weight: 600;
+ letter-spacing: 1px;
+ color: var(--stranger-red);
+ text-transform: uppercase;
+ margin-bottom: 12px;
+ }
+
+ .episode-title {
+ font-size: 20px;
+ font-weight: 600;
+ color: var(--text-primary);
+ margin-bottom: 12px;
+ line-height: 1.3;
+ }
+
+ .episode-desc {
+ font-size: 14px;
+ color: var(--text-secondary);
+ line-height: 1.6;
+ margin-bottom: 16px;
+ }
+
+ .episode-meta {
+ display: flex;
+ gap: 16px;
+ font-size: 12px;
+ color: var(--text-secondary);
+ padding-top: 12px;
+ border-top: 1px solid var(--border-subtle);
+ }
+
+ .episode-meta span {
+ display: flex;
+ align-items: center;
+ gap: 4px;
+ }
+
+ /* Characters Grid */
+ .characters-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+ gap: 24px;
+ }
+
+ .character-card {
+ background: var(--bg-secondary);
+ border: 1px solid var(--border-subtle);
+ border-radius: 16px;
+ padding: 32px 24px;
+ text-align: center;
+ transition: all 0.3s ease;
+ position: relative;
+ overflow: hidden;
+ }
+
+ .character-card::before {
+ content: '';
+ position: absolute;
+ top: 0;
+ left: 0;
+ right: 0;
+ height: 3px;
+ background: linear-gradient(90deg, var(--stranger-red), var(--upside-down-teal));
+ opacity: 0;
+ transition: opacity 0.3s ease;
+ }
+
+ .character-card:hover {
+ border-color: var(--stranger-red);
+ transform: translateY(-4px);
+ box-shadow: 0 12px 40px rgba(230, 36, 41, 0.2);
+ }
+
+ .character-card:hover::before {
+ opacity: 1;
+ }
+
+ .character-card:focus-within {
+ border-color: var(--upside-down-teal);
+ box-shadow: 0 0 0 2px rgba(0, 212, 170, 0.3);
+ }
+
+ .character-icon {
+ width: 80px;
+ height: 80px;
+ background: linear-gradient(135deg, var(--stranger-red), var(--upside-down-teal));
+ border-radius: 50%;
+ margin: 0 auto 20px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-size: 36px;
+ box-shadow: 0 8px 24px rgba(230, 36, 41, 0.3);
+ }
+
+ .character-name {
+ font-size: 18px;
+ font-weight: 600;
+ color: var(--text-primary);
+ margin-bottom: 8px;
+ }
+
+ .character-role {
+ font-size: 14px;
+ color: var(--text-secondary);
+ margin-bottom: 12px;
+ }
+
+ .character-quote {
+ font-size: 13px;
+ color: var(--stranger-red);
+ font-style: italic;
+ font-weight: 500;
+ line-height: 1.5;
+ padding: 8px 12px;
+ background: rgba(230, 36, 41, 0.05);
+ border-radius: 8px;
+ border-left: 2px solid var(--stranger-red);
+ }
+
+ /* Quote Section */
+ .quote-section {
+ background: var(--bg-secondary);
+ border: 1px solid var(--border-subtle);
+ border-radius: 20px;
+ padding: 56px 48px;
+ text-align: center;
+ position: relative;
+ margin-top: 40px;
+ overflow: hidden;
+ }
+
+ .quote-section::before {
+ content: '';
+ position: absolute;
+ top: -50%;
+ left: -50%;
+ width: 200%;
+ height: 200%;
+ background: radial-gradient(circle, rgba(230, 36, 41, 0.08) 0%, transparent 70%);
+ animation: quoteGlow 8s ease-in-out infinite;
+ }
+
+ @keyframes quoteGlow {
+ 0%, 100% { transform: translate(0, 0); }
+ 50% { transform: translate(10%, 10%); }
+ }
+
+ .quote-icon {
+ font-size: 48px;
+ color: var(--stranger-red);
+ opacity: 0.3;
+ margin-bottom: 16px;
+ line-height: 1;
+ }
+
+ .quote-text {
+ font-family: 'Beon', sans-serif;
+ font-size: 32px;
+ font-weight: 700;
+ font-style: italic;
+ color: var(--text-primary);
+ line-height: 1.4;
+ margin-bottom: 24px;
+ position: relative;
+ z-index: 1;
+ letter-spacing: 1px;
+ text-transform: uppercase;
+ }
+
+ .quote-author {
+ font-size: 16px;
+ color: var(--stranger-red);
+ font-weight: 600;
+ letter-spacing: 2px;
+ text-transform: uppercase;
+ position: relative;
+ z-index: 1;
+ }
+
+ /* Lore Section */
+ .lore-section {
+ background: var(--bg-secondary);
+ border: 1px solid var(--border-subtle);
+ border-radius: 20px;
+ padding: 48px;
+ margin-top: 40px;
+ }
+
+ .lore-content {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+ gap: 32px;
+ margin-top: 32px;
+ }
+
+ .lore-item {
+ padding: 24px;
+ background: var(--bg-tertiary);
+ border-radius: 12px;
+ border: 1px solid var(--border-subtle);
+ transition: all 0.3s ease;
+ }
+
+ .lore-item:hover {
+ border-color: var(--border-light);
+ transform: translateY(-2px);
+ }
+
+ .lore-icon {
+ font-size: 32px;
+ margin-bottom: 16px;
+ }
+
+ .lore-title {
+ font-size: 18px;
+ font-weight: 600;
+ color: var(--text-primary);
+ margin-bottom: 8px;
+ text-transform: uppercase;
+ letter-spacing: 1px;
+ }
+
+ .lore-desc {
+ font-size: 14px;
+ color: var(--text-secondary);
+ line-height: 1.6;
+ }
+
+ /* Footer */
+ footer {
+ text-align: center;
+ padding: 48px 24px;
+ margin-top: 80px;
+ border-top: 1px solid var(--border-subtle);
+ position: relative;
+ z-index: 1;
+ }
+
+ .fan-badge {
+ display: inline-block;
+ padding: 8px 20px;
+ background: rgba(230, 36, 41, 0.1);
+ border: 1px solid rgba(230, 36, 41, 0.3);
+ border-radius: 20px;
+ font-size: 12px;
+ font-weight: 600;
+ letter-spacing: 1px;
+ text-transform: uppercase;
+ color: var(--stranger-red);
+ margin-bottom: 16px;
+ }
+
+ .footer-text {
+ color: var(--text-secondary);
+ font-size: 14px;
+ margin: 8px 0;
+ line-height: 1.6;
+ }
+
+ .footer-disclaimer {
+ font-size: 12px;
+ color: var(--text-secondary);
+ opacity: 0.6;
+ margin-top: 16px;
+ max-width: 600px;
+ margin-left: auto;
+ margin-right: auto;
+ }
+
+ /* Responsive */
+ @media (max-width: 768px) {
+ .main-title {
+ font-size: 42px;
+ }
+
+ .enter-title {
+ font-size: 42px;
+ }
+
+ .subtitle {
+ font-size: 14px;
+ letter-spacing: 2px;
+ }
+
+ .container {
+ padding: 80px 16px 40px;
+ }
+
+ .section-title {
+ font-size: 24px;
+ }
+
+ .section-title::after {
+ width: 60px;
+ height: 2px;
+ bottom: -8px;
+ }
+
+ .quote-section {
+ padding: 32px 24px;
+ }
+
+ .quote-text {
+ font-size: 20px;
+ }
+
+ .audio-controls {
+ bottom: 20px;
+ right: 20px;
+ padding: 10px 16px;
+ gap: 8px;
+ }
+
+ .volume-slider {
+ width: 80px;
+ }
+
+ .lore-section {
+ padding: 32px 24px;
+ }
+
+ .lore-content {
+ grid-template-columns: 1fr;
+ }
+
+ .nav-brand {
+ font-size: 16px;
+ letter-spacing: 1px;
+ }
+
+ header {
+ margin-bottom: 60px;
+ padding-top: 20px;
+ }
+ }
+
+ /* Reduced motion */
+ @media (prefers-reduced-motion: reduce) {
+ * {
+ animation-duration: 0.01ms !important;
+ animation-iteration-count: 1 !important;
+ transition-duration: 0.01ms !important;
+ }
+
+ .particles {
+ display: none;
+ }
+ }
+
+ /* Focus styles */
+ a:focus-visible,
+ button:focus-visible,
+ [tabindex]:focus-visible {
+ outline: 2px solid var(--upside-down-teal);
+ outline-offset: 2px;
+ }
+ </style>
+ </head>
+ <body>
+ <!-- Skip Link -->
+ <a href="#main-content" class="skip-link">Skip to main content</a>
+
+ <!-- Audio Elements -->
+ <audio id="bg-music" loop preload="none">
+ <source src="https://cdn.pixabay.com/download/audio/2022/10/05/audio_674cafc9f8.mp3" type="audio/mpeg">
+ Your browser does not support the audio element.
+ </audio>
+
+ <audio id="sfx-hover" preload="none">
+ <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_7a2c8b8e8e.mp3" type="audio/mpeg">
+ </audio>
+
+ <audio id="sfx-click" preload="none">
+ <source src="https://cdn.pixabay.com/download/audio/2022/03/24/audio_c8a3e8e8e8.mp3" type="audio/mpeg">
+ </audio>
+
+ <!-- Floating Particles -->
+ <div class="particles" aria-hidden="true">
+ <div class="particle"></div>
+ <div class="particle"></div>
+ <div class="particle"></div>
+ <div class="particle"></div>
+ <div class="particle"></div>
+ <div class="particle"></div>
+ <div class="particle"></div>
+ <div class="particle"></div>
+ <div class="particle"></div>
+ </div>
+
+ <!-- Navigation -->
+ <nav class="main-nav" role="navigation" aria-label="Main navigation">
+ <a href="#" class="nav-brand" aria-label="Stranger Things Tribute Home">STRANGER THINGS</a>
+ <button class="mobile-menu-toggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="nav-links">
+ ☰
+ </button>
+ <ul class="nav-links" id="nav-links">
+ <li><a href="#episodes">Episodes</a></li>
+ <li><a href="#characters">Characters</a></li>
+ <li><a href="#lore">The Upside Down</a></li>
+ <li><a href="#quotes">Quotes</a></li>
+ </ul>
+ </nav>
+
+ <!-- Enter Screen -->
+ <div class="enter-screen" id="enter-screen" role="dialog" aria-modal="true" aria-labelledby="enter-title">
+ <h1 class="enter-title" id="enter-title">Stranger Things</h1>
+ <p class="enter-subtitle">Enter the Upside Down</p>
+ <button class="enter-btn" id="enter-btn">
+ 🎵 Enter with Music
+ </button>
+ </div>
+
+ <!-- Audio Controls -->
+ <div class="audio-controls" role="region" aria-label="Audio controls">
+ <button class="audio-btn" id="play-pause-btn" title="Play/Pause background music" aria-label="Play background music" aria-pressed="false">
+ ▶️
+ </button>
+ <span class="audio-label" id="audio-status">Music Off</span>
+ <div class="volume-slider" id="volume-slider" role="slider" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50" aria-valuetext="50 percent" tabindex="0">
+ <div class="volume-fill" id="volume-fill"></div>
+ </div>
+ </div>
+
+ <div class="container" id="main-content">
+ <header>
+ <span class="series-tag">Netflix Original Series</span>
+ <h1 class="main-title">Stranger Things</h1>
+ <p class="subtitle">A Fan-Made Tribute to Hawkins, Indiana</p>
+ </header>
+
+ <main class="content">
+ <!-- Intro -->
+ <p class="intro-text">
+ Step into the mysterious town of Hawkins, Indiana, where supernatural forces lurk beneath the surface.
+ From the Mind Flayer to Eleven's psychic powers, experience the nostalgia, terror, and friendship that defined a generation.
+ </p>
+
+ <!-- Episodes Section -->
+ <section id="episodes" aria-labelledby="episodes-title">
+ <h2 class="section-title" id="episodes-title">Featured Episodes</h2>
+ <div class="episodes-grid">
+ <article class="episode-card">
+ <div class="episode-number">Season 1 • Episode 1</div>
+ <h3 class="episode-title">The Vanishing of Will Byers</h3>
+ <p class="episode-desc">On his way home from a friend's house, young Will sees something terrifying. Nearby, a secret government lab prepares for something even worse.</p>
+ <div class="episode-meta">
+ <span>⏱️ 47 min</span>
+ <span>⭐ 8.7/10</span>
+ <span>📅 2016</span>
+ </div>
+ </article>
+ <article class="episode-card">
+ <div class="episode-number">Season 2 • Episode 9</div>
+ <h3 class="episode-title">The Gate</h3>
+ <p class="episode-desc">Eleven makes plans to finish what she started while the survivors turn up the heat on the monstrous force that holds Will hostage.</p>
+ <div class="episode-meta">
+ <span>⏱️ 62 min</span>
+ <span>⭐ 9.1/10</span>
+ <span>📅 2017</span>
+ </div>
+ </article>
+ <article class="episode-card">
+ <div class="episode-number">Season 3 • Episode 8</div>
+ <h3 class="episode-title">The Battle of Starcourt</h3>
+ <p class="episode-desc">Terror reigns in the food court when the Mind Flayer comes to collect. But down below, in the dark, the future of the world is at stake.</p>
+ <div class="episode-meta">
+ <span>⏱️ 78 min</span>
+ <span>⭐ 9.0/10</span>
+ <span>📅 2019</span>
+ </div>
+ </article>
+ <article class="episode-card">
+ <div class="episode-number">Season 4 • Episode 9</div>
+ <h3 class="episode-title">The Piggyback</h3>
+ <p class="episode-desc">The final battle begins. As Hawkins faces annihilation, the kids reunite for one last stand against Vecna and the Upside Down.</p>
+ <div class="episode-meta">
+ <span>⏱️ 103 min</span>
+ <span>⭐ 9.3/10</span>
+ <span>📅 2022</span>
+ </div>
+ </article>
+ </div>
+ </section>
+
+ <!-- Characters Section -->
+ <section id="characters" aria-labelledby="characters-title">
+ <h2 class="section-title" id="characters-title">Main Characters</h2>
+ <div class="characters-grid">
+ <article class="character-card" tabindex="0">
+ <div class="character-icon">👧</div>
+ <h3 class="character-name">Eleven</h3>
+ <p class="character-role">The Psychic Hero</p>
+ <p class="character-quote">"Friends don't lie."</p>
+ </article>
+ <article class="character-card" tabindex="0">
+ <div class="character-icon">👦</div>
+ <h3 class="character-name">Mike Wheeler</h3>
+ <p class="character-role">The Leader</p>
+ <p class="character-quote">"She's our friend. She's crazy."</p>
+ </article>
+ <article class="character-card" tabindex="0">
+ <div class="character-icon">🚲</div>
+ <h3 class="character-name">Dustin Henderson</h3>
+ <p class="character-role">The Smart One</p>
+ <p class="character-quote">"I'm the king of this table!"</p>
+ </article>
+ <article class="character-card" tabindex="0">
+ <div class="character-icon">🎸</div>
+ <h3 class="character-name">Will Byers</h3>
+ <p class="character-role">The Survivor</p>
+ <p class="character-quote">"I'm here too, you know."</p>
+ </article>
+ <article class="character-card" tabindex="0">
+ <div class="character-icon">🏃</div>
+ <h3 class="character-name">Lucas Sinclair</h3>
+ <p class="character-role">The Skeptic</p>
+ <p class="character-quote">"This is crazy. We need to go to the cops."</p>
+ </article>
+ <article class="character-card" tabindex="0">
+ <div class="character-icon">👮‍♂️</div>
+ <h3 class="character-name">Jim Hopper</h3>
+ <p class="character-role">The Protector</p>
+ <p class="character-quote">"Mornings are for coffee and contemplation."</p>
+ </article>
+ <article class="character-card" tabindex="0">
+ <div class="character-icon">🧪</div>
+ <h3 class="character-name">Steve Harrington</h3>
+ <p class="character-role">The Unexpected Hero</p>
+ <p class="character-quote">"I'm not some babysitter. I'm a mother."</p>
+ </article>
+ <article class="character-card" tabindex="0">
+ <div class="character-icon">🕯️</div>
+ <h3 class="character-name">Nancy Wheeler</h3>
+ <p class="character-role">The Investigator</p>
+ <p class="character-quote">"I can still help."</p>
+ </article>
+ </div>
+ </section>
+
+ <!-- Quote Section -->
+ <section id="quotes" class="quote-section" aria-labelledby="quote-heading">
+ <div class="quote-icon">❝</div>
+ <p class="quote-text" id="quote-heading">Friends don't lie</p>
+ <p class="quote-author">— Eleven</p>
+ </section>
+
+ <!-- Lore Section -->
+ <section id="lore" aria-labelledby="lore-title">
+ <h2 class="section-title centered" id="lore-title">The World of Stranger Things</h2>
+ <p class="intro-text">
+ Hawkins, Indiana hides dark secrets. Alternate dimensions, government experiments, and supernatural entities lurk just beyond the veil of reality.
+ </p>
+ <div class="lore-section">
+ <div class="lore-content">
+ <div class="lore-item">
+ <div class="lore-icon">🌌</div>
+ <h3 class="lore-title">The Upside Down</h3>
+ <p class="lore-desc">An alternate dimension mirroring our world, but twisted, dark, and filled with dangerous creatures.</p>
+ </div>
+ <div class="lore-item">
+ <div class="lore-icon">🧠</div>
+ <h3 class="lore-title">Mind Flayer</h3>
+ <p class="lore-desc">A terrifying interdimensional entity that can possess and control living beings across dimensions.</p>
+ </div>
+ <div class="lore-item">
+ <div class="lore-icon">🔢</div>
+ <h3 class="lore-title">Vecna</h3>
+ <p class="lore-desc">A powerful psychic entity from the Upside Down with a deadly ability to manipulate victims through their fears.</p>
+ </div>
+ <div class="lore-item">
+ <div class="lore-icon">⚡</div>
+ <h3 class="lore-title">The Lab</h3>
+ <p class="lore-desc">Hawkins National Laboratory, where MKUltra experiments created a gateway to the Upside Down.</p>
+ </div>
+ </div>
+ </div>
+ </section>
+ </main>
+
+ <footer>
+ <span class="fan-badge">Fan Created</span>
+ <p class="footer-text">Made with ❤️ by a Stranger Things fan</p>
+ <p class="footer-text" style="margin-top: 8px;">This is a tribute page. All rights belong to Netflix and the Duffer Brothers.</p>
+ <p class="footer-disclaimer">
+ This fan site is not affiliated with Netflix, Inc. or the Duffer Brothers. Stranger Things is a trademark of Netflix.
+ </p>
+ </footer>
+ </div>
+
+ <script>
+ // Audio elements
+ const bgMusic = document.getElementById('bg-music');
+ const sfxHover = document.getElementById('sfx-hover');
+ const sfxClick = document.getElementById('sfx-click');
+ const playPauseBtn = document.getElementById('play-pause-btn');
+ const volumeSlider = document.getElementById('volume-slider');
+ const volumeFill = document.getElementById('volume-fill');
+ const enterScreen = document.getElementById('enter-screen');
+ const enterBtn = document.getElementById('enter-btn');
+ const audioStatus = document.getElementById('audio-status');
+ const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+ const navLinks = document.querySelector('.nav-links');
+
+ let isPlaying = false;
+ let volume = 0.5;
+ let sfxEnabled = true;
+
+ // Initialize volume
+ bgMusic.volume = volume;
+ volumeFill.style.width = (volume * 100) + '%';
+
+ // Mobile menu toggle
+ mobileMenuToggle.addEventListener('click', () => {
+ const isActive = navLinks.classList.toggle('active');
+ mobileMenuToggle.setAttribute('aria-expanded', isActive);
+ mobileMenuToggle.textContent = isActive ? '✕' : '☰';
+ });
+
+ // Close mobile menu when clicking a link
+ document.querySelectorAll('.nav-links a').forEach(link => {
+ link.addEventListener('click', () => {
+ navLinks.classList.remove('active');
+ mobileMenuToggle.setAttribute('aria-expanded', 'false');
+ mobileMenuToggle.textContent = '☰';
+ });
+ });
+
+ // Smooth scroll to section
+ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+ anchor.addEventListener('click', function (e) {
+ const targetId = this.getAttribute('href');
+ if (targetId === '#') return;
+ const target = document.querySelector(targetId);
+ if (target) {
+ e.preventDefault();
+ target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+ target.setAttribute('tabindex', '-1');
+ target.focus({ preventScroll: true });
+ }
+ });
+ });
+
+ // Skip link functionality
+ document.getElementById('main-content').setAttribute('tabindex', '-1');
+ document.querySelector('.skip-link').addEventListener('click', (e) => {
+ e.preventDefault();
+ document.getElementById('main-content').focus();
+ document.getElementById('main-content').scrollIntoView({ behavior: 'smooth' });
+ });
+
+ // Enter screen - start music on user interaction
+ enterBtn.addEventListener('click', () => {
+ playMusic();
+ enterScreen.classList.add('hidden');
+ enterScreen.setAttribute('aria-hidden', 'true');
+ document.body.style.overflow = 'auto';
+
+ // Play subtle enter sound
+ sfxClick.volume = 0.3;
+ sfxClick.play().catch(() => {});
+ });
+
+ // Play/Pause toggle
+ playPauseBtn.addEventListener('click', () => {
+ if (isPlaying) {
+ pauseMusic();
+ } else {
+ playMusic();
+ }
+ if (sfxEnabled) {
+ playSoundEffect(sfxClick, 0.3);
+ }
+ });
+
+ function playMusic() {
+ bgMusic.play().then(() => {
+ isPlaying = true;
+ playPauseBtn.textContent = '⏸️';
+ playPauseBtn.classList.add('playing');
+ playPauseBtn.setAttribute('aria-label', 'Pause background music');
+ playPauseBtn.setAttribute('aria-pressed', 'true');
+ audioStatus.textContent = 'Music On';
+ }).catch(error => {
+ console.log('Audio playback failed:', error);
+ });
+ }
+
+ function pauseMusic() {
+ bgMusic.pause();
+ isPlaying = false;
+ playPauseBtn.textContent = '▶️';
+ playPauseBtn.classList.remove('playing');
+ playPauseBtn.setAttribute('aria-label', 'Play background music');
+ playPauseBtn.setAttribute('aria-pressed', 'false');
+ audioStatus.textContent = 'Music Off';
+ }
+
+ // Volume control
+ volumeSlider.addEventListener('click', (e) => {
+ const rect = volumeSlider.getBoundingClientRect();
+ const x = e.clientX - rect.left;
+ const percentage = Math.max(0, Math.min(1, x / rect.width));
+ volume = percentage;
+ bgMusic.volume = volume;
+ volumeFill.style.width = (volume * 100) + '%';
+ volumeSlider.setAttribute('aria-valuenow', Math.round(volume * 100));
+ volumeSlider.setAttribute('aria-valuetext', `${Math.round(volume * 100)} percent`);
+ if (sfxEnabled) {
+ playSoundEffect(sfxClick, 0.3);
+ }
+ });
+
+ // Keyboard controls for volume slider
+ volumeSlider.addEventListener('keydown', (e) => {
+ if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+ e.preventDefault();
+ volume = Math.min(1, volume + 0.05);
+ } else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+ e.preventDefault();
+ volume = Math.max(0, volume - 0.05);
+ } else if (e.key === 'Home') {
+ e.preventDefault();
+ volume = 0;
+ } else if (e.key === 'End') {
+ e.preventDefault();
+ volume = 1;
+ } else {
+ return;
+ }
+ bgMusic.volume = volume;
+ volumeFill.style.width = (volume * 100) + '%';
+ volumeSlider.setAttribute('aria-valuenow', Math.round(volume * 100));
+ volumeSlider.setAttribute('aria-valuetext', `${Math.round(volume * 100)} percent`);
+ if (sfxEnabled) {
+ playSoundEffect(sfxClick, 0.2);
+ }
+ });
+
+ // Sound effects on card interactions
+ document.querySelectorAll('.episode-card, .character-card, .enter-btn, .audio-btn').forEach(card => {
+ card.addEventListener('mouseenter', () => {
+ if (sfxEnabled) {
+ playSoundEffect(sfxHover, 0.15);
+ }
+ });
+ });
+
+ function playSoundEffect(audioElement, vol) {
+ audioElement.currentTime = 0;
+ audioElement.volume = vol;
+ audioElement.play().catch(() => {});
+ }
+
+ // Keyboard shortcuts
+ document.addEventListener('keydown', (e) => {
+ if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+ if (e.code === 'Space' && !enterScreen.classList.contains('hidden')) {
+ e.preventDefault();
+ enterBtn.click();
+ } else if (e.code === 'Space' && enterScreen.classList.contains('hidden') && e.target === document.body) {
+ e.preventDefault();
+ playPauseBtn.click();
+ } else if (e.code === 'ArrowUp' && e.ctrlKey) {
+ e.preventDefault();
+ volume = Math.min(1, volume + 0.1);
+ bgMusic.volume = volume;
+ volumeFill.style.width = (volume * 100) + '%';
+ volumeSlider.setAttribute('aria-valuenow', Math.round(volume * 100));
+ volumeSlider.setAttribute('aria-valuetext', `${Math.round(volume * 100)} percent`);
+ } else if (e.code === 'ArrowDown' && e.ctrlKey) {
+ e.preventDefault();
+ volume = Math.max(0, volume - 0.1);
+ bgMusic.volume = volume;
+ volumeFill.style.width = (volume * 100) + '%';
+ volumeSlider.setAttribute('aria-valuenow', Math.round(volume * 100));
+ volumeSlider.setAttribute('aria-valuetext', `${Math.round(volume * 100)} percent`);
+ } else if (e.key === 'm' && e.ctrlKey) {
+ e.preventDefault();
+ playPauseBtn.click();
+ }
+ });
+
+ // Visual feedback for audio state
+ bgMusic.addEventListener('play', () => {
+ playPauseBtn.classList.add('playing');
+ });
+
+ bgMusic.addEventListener('pause', () => {
+ playPauseBtn.classList.remove('playing');
+ });
+
+ // Intersection Observer for scroll animations
+ if ('IntersectionObserver' in window) {
+ const observerOptions = {
+ threshold: 0.1,
+ rootMargin: '0px 0px -50px 0px'
+ };
+
+ const observer = new IntersectionObserver((entries) => {
+ entries.forEach(entry => {
+ if (entry.isIntersecting) {
+ entry.target.style.opacity = '1';
+ entry.target.style.transform = 'translateY(0)';
+ }
+ });
+ }, observerOptions);
+
+ // Observe sections for fade-in
+ document.querySelectorAll('section').forEach(section => {
+ section.style.opacity = '0';
+ section.style.transform = 'translateY(20px)';
+ section.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+ observer.observe(section);
+ });
+ }
+
+ // Lazy load audio on first user interaction
+ let audioInitialized = false;
+ document.addEventListener('click', () => {
+ if (!audioInitialized) {
+ bgMusic.load();
+ audioInitialized = true;
+ }
+ }, { once: true });
+ </script>
+ </body>
+ </html>

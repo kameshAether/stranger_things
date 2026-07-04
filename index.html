@@ -712,9 +712,6 @@
         const bgMusic = document.getElementById('bg-music');
         const sfxHover = document.getElementById('sfx-hover');
         const sfxClick = document.getElementById('sfx-click');
-        const playPauseBtn = document.getElementById('play-pause-btn');
-        const volumeSlider = document.getElementById('volume-slider');
-        const volumeFill = document.getElementById('volume-fill');
         const enterScreen = document.getElementById('enter-screen');
         const enterBtn = document.getElementById('enter-btn');
 
@@ -723,7 +720,6 @@
 
         // Initialize volume
         bgMusic.volume = volume;
-        volumeFill.style.width = (volume * 100) + '%';
 
         // Enter screen - start music on user interaction
         enterBtn.addEventListener('click', () => {
@@ -735,21 +731,9 @@
             sfxClick.play().catch(() => {});
         });
 
-        // Play/Pause toggle
-        playPauseBtn.addEventListener('click', () => {
-            if (isPlaying) {
-                pauseMusic();
-            } else {
-                playMusic();
-            }
-            playSoundEffect(sfxClick, 0.3);
-        });
-
         function playMusic() {
             bgMusic.play().then(() => {
                 isPlaying = true;
-                playPauseBtn.textContent = '⏸️';
-                playPauseBtn.classList.add('playing');
             }).catch(error => {
                 console.log('Audio playback failed:', error);
             });
@@ -758,23 +742,10 @@
         function pauseMusic() {
             bgMusic.pause();
             isPlaying = false;
-            playPauseBtn.textContent = '▶️';
-            playPauseBtn.classList.remove('playing');
         }
 
-        // Volume control
-        volumeSlider.addEventListener('click', (e) => {
-            const rect = volumeSlider.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const percentage = Math.max(0, Math.min(1, x / rect.width));
-            volume = percentage;
-            bgMusic.volume = volume;
-            volumeFill.style.width = (volume * 100) + '%';
-            playSoundEffect(sfxClick, 0.3);
-        });
-
         // Sound effects on card interactions
-        document.querySelectorAll('.episode-card, .character-card, .enter-btn, .audio-btn').forEach(card => {
+        document.querySelectorAll('.episode-card, .character-card, .enter-btn').forEach(card => {
             card.addEventListener('mouseenter', () => {
                 playSoundEffect(sfxHover, 0.15);
             });
@@ -791,19 +762,6 @@
             if (e.code === 'Space' && !enterScreen.classList.contains('hidden')) {
                 e.preventDefault();
                 enterBtn.click();
-            } else if (e.code === 'Space' && enterScreen.classList.contains('hidden')) {
-                e.preventDefault();
-                playPauseBtn.click();
-            } else if (e.code === 'ArrowUp') {
-                e.preventDefault();
-                volume = Math.min(1, volume + 0.1);
-                bgMusic.volume = volume;
-                volumeFill.style.width = (volume * 100) + '%';
-            } else if (e.code === 'ArrowDown') {
-                e.preventDefault();
-                volume = Math.max(0, volume - 0.1);
-                bgMusic.volume = volume;
-                volumeFill.style.width = (volume * 100) + '%';
             }
         });
 

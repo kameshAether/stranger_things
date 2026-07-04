@@ -2,10 +2,22 @@
 
 All notable changes to the Stranger Things Tribute Page will be documented in this file.
 
-## [Unreleased] - 2026-07-04
+## [1.1.0] - 2026-07-04
 
 ### Added
-- Meta description and theme-color tags for browser chrome
+- **Boutique Design System**: Migrated to a professional 4-column Bento Grid layout.
+- **Glassmorphism 2.0**: Upgraded cards with frosted acrylic effects, `backdrop-filter` blur, and Linear-Gradient light sweeps.
+- **Cinematic Atmosphere**: Added a fractal noise film-grain overlay and GPU-accelerated drifting ambient orbs.
+- **Magnetic Interactions**: Implemented a Lerp-based `MagneticCard` class for tactile cursor-following animations.
+- **Cast Portraits**: Replaced emojis with high-resolution professional portraits of the main cast.
+- **Typographic Polish**: Adjusted letter-spacing and line-heights for agency-grade visual hierarchy.
+
+### Changed
+- **UI Cleanup**: Removed the audio control panel from the bottom right to reduce visual noise.
+- **Performance**: Enforced `translate3d` and `will-change` for 60fps animation fluidity.
+
+### Fixed
+- Resolved a fatal JS error where missing audio control elements blocked the "Enter" screen functionality.
 
 ## [1.0.0] - 2025-01-01
 

@@ -26,6 +26,7 @@
             --upside-down-teal: #00d4aa;
             --border-subtle: rgba(255, 255, 255, 0.04);
             --border-light: rgba(255, 255, 255, 0.08);
+            --shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.4);
         }
 
         body {
@@ -35,21 +36,42 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
+            z-index: 0;
         }
 
-        /* Ambient background effects */
-        body::before {
-            content: '';
+        /* — Global Noise (Film Look) — */
+        .noise-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: 
-                radial-gradient(ellipse at 20% 50%, rgba(230, 36, 41, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 50%, rgba(0, 212, 170, 0.08) 0%, transparent 50%);
+            inset: 0;
             pointer-events: none;
-            z-index: 0;
+            z-index: 999;
+            opacity: 0.03;
+            background-image: url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E\");
+        }
+
+        /* — Ambient Orbs — */
+        .ambient-orb {
+            position: fixed;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: -1;
+            filter: blur(180px);
+            opacity: 0.3;
+            will-change: transform;
+        }
+        .ambient-orb.orb-1 {
+            width: 600px;
+            height: 600px;
+            background: var(--stranger-red);
+            top: -150px;
+            left: -150px;
+        }
+        .ambient-orb.orb-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--upside-down-teal);
+            bottom: -150px;
+            right: -150px;
         }
 
         /* Floating particles */
@@ -66,11 +88,13 @@
 
         .particle {
             position: absolute;
-            width: 3px;
-            height: 3px;
-            background: rgba(230, 36, 41, 0.4);
+            width: 2px;
+            height: 2px;
+            background: rgba(230, 36, 41, 0.6);
             border-radius: 50%;
-            animation: float 15s infinite;
+            box-shadow: 0 0 8px rgba(230, 36, 41, 0.8);
+            animation: float 12s infinite ease-in-out;
+            will-change: transform, opacity;
         }
 
         .particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 18s; }
@@ -84,14 +108,22 @@
         .particle:nth-child(9) { left: 90%; animation-delay: 1s; animation-duration: 24s; }
 
         @keyframes float {
-            0%, 100% {
-                transform: translateY(100vh) scale(0);
+            0% {
+                transform: translateY(110vh) translateX(0) scale(0);
                 opacity: 0;
             }
-            10% { opacity: 1; }
-            90% { opacity: 1; }
+            20% {
+                opacity: 0.6;
+            }
+            50% {
+                transform: translateY(50vh) translateX(20px) scale(1);
+                opacity: 0.8;
+            }
+            80% {
+                opacity: 0.6;
+            }
             100% {
-                transform: translateY(-100vh) scale(1);
+                transform: translateY(-10vh) translateX(-20px) scale(0.5);
                 opacity: 0;
             }
         }
@@ -275,9 +307,9 @@
 
         .main-title {
             font-size: 72px;
-            font-weight: 700;
-            letter-spacing: -2px;
-            line-height: 1.1;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            line-height: 1;
             margin-bottom: 16px;
             text-transform: uppercase;
             background: linear-gradient(180deg, var(--stranger-red) 0%, var(--stranger-red-glow) 100%);
@@ -289,10 +321,10 @@
         }
 
         .subtitle {
-            font-size: 18px;
+            font-size: 16px;
             color: var(--text-secondary);
-            font-weight: 400;
-            letter-spacing: 3px;
+            font-weight: 500;
+            letter-spacing: 0.3em;
             text-transform: uppercase;
         }
 
@@ -323,42 +355,55 @@
             background: var(--stranger-red);
         }
 
-        .episodes-grid {
+        /* — Bento Grid — */
+        .bento-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: auto;
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
         }
 
-        .episode-card {
-            background: var(--bg-secondary);
+        .bento-hero { grid-column: span 2; grid-row: span 2; }
+        .bento-wide { grid-column: span 2; }
+        .bento-tall { grid-row: span 2; }
+
+        /* — Cards (Glassmorphism 2.0) — */
+        .episode-card, .character-card {
+            background: rgba(15, 15, 15, 0.7);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
             border: 1px solid var(--border-subtle);
-            border-radius: 16px;
+            border-radius: 24px;
             padding: 28px;
-            transition: all 0.3s ease;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
             position: relative;
             overflow: hidden;
+            will-change: transform;
         }
 
-        .episode-card::before {
+        /* — Glint Effect — */
+        .episode-card::before, .character-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--stranger-red), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            inset: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.03) 50%, transparent 100%);
+            transform: translateX(-100%);
+            transition: transform 0.6s ease;
+            pointer-events: none;
+            z-index: 2;
         }
 
-        .episode-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--border-light);
-            box-shadow: 0 12px 40px rgba(230, 36, 41, 0.15);
+        .episode-card:hover::before, .character-card:hover::before {
+            transform: translateX(100%);
         }
 
-        .episode-card:hover::before {
-            opacity: 1;
+        .episode-card:hover, .character-card:hover {
+            border-color: var(--stranger-red);
+            box-shadow: var(--shadow-glass), inset 0 0 20px rgba(230, 36, 41, 0.05);
+            transform: translateY(-5px);
         }
 
         .episode-number {
@@ -563,6 +608,11 @@
     </style>
 </head>
 <body>
+    <!-- Atmosphere Layer -->
+    <div class="noise-overlay"></div>
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+
     <!-- Audio Elements -->
     <audio id="bg-music" loop>
         <source src="https://cdn.pixabay.com/download/audio/2022/10/05/audio_674cafc9f8.mp3" type="audio/mpeg">
@@ -622,13 +672,13 @@
         <!-- Episodes Section -->
         <section class="reveal">
         <h2 class="section-title">Featured Episodes</h2>
-        <div class="episodes-grid">
-        <div class="episode-card reveal">
+        <div class="bento-grid">
+        <div class="episode-card reveal bento-hero">
         <div class="episode-number">Season 1 • Episode 1</div>
         <h3 class="episode-title">The Vanishing of Will Byers</h3>
         <p class="episode-desc">On his way home from a friend's house, young Will sees something terrifying. Nearby, a secret government lab prepares for something even worse.</p>
         </div>
-        <div class="episode-card reveal">
+        <div class="episode-card reveal bento-wide">
         <div class="episode-number">Season 2 • Episode 9</div>
         <h3 class="episode-title">The Gate</h3>
         <p class="episode-desc">Eleven makes plans to finish what she started while the survivors turn up the heat on the monstrous force that holds Will hostage.</p>
@@ -644,8 +694,8 @@
         <!-- Characters Section -->
         <section class="reveal">
         <h2 class="section-title">Main Characters</h2>
-        <div class="characters-grid">
-        <div class="character-card reveal">
+        <div class="bento-grid">
+        <div class="character-card reveal bento-hero">
         <div class="character-icon">👧</div>
         <div class="character-name">Eleven</div>
         <div class="character-role">The Psychic Hero</div>
@@ -660,7 +710,7 @@
         <div class="character-name">Dustin Henderson</div>
         <div class="character-role">The Smart One</div>
         </div>
-        <div class="character-card reveal">
+        <div class="character-card reveal bento-wide">
         <div class="character-icon">🎸</div>
         <div class="character-name">Will Byers</div>
         <div class="character-role">The Survivor</div>
@@ -683,6 +733,51 @@
     </div>
 
     <script>
+        // — Magnetic Card Effect —
+        class MagneticCard {
+            constructor(element) {
+                this.element = element;
+                this.x = 0;
+                this.y = 0;
+                this.targetX = 0;
+                this.targetY = 0;
+                this.ease = 0.15;
+                this.strength = 15;
+
+                this.init();
+            }
+
+            init() {
+                window.addEventListener('mousemove', (e) => {
+                    const rect = this.element.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                    
+                    this.targetX = (e.clientX - centerX) * 0.05;
+                    this.targetY = (e.clientY - centerY) * 0.05;
+                });
+
+                window.addEventListener('mouseleave', () => {
+                    this.targetX = 0;
+                    this.targetY = 0;
+                });
+
+                this.update();
+            }
+
+            update() {
+                this.x += (this.targetX - this.x) * this.ease;
+                this.y += (this.targetY - this.y) * this.ease;
+
+                this.element.style.transform = `translate3d(${this.x}px, ${this.y}px, 0)`;
+
+                requestAnimationFrame(() => this.update());
+            }
+        }
+
+        // Initialize Magnetic Cards
+        document.querySelectorAll('.episode-card, .character-card').forEach(card => new MagneticCard(card));
+
         // Audio elements
         const bgMusic = document.getElementById('bg-music');
         const sfxHover = document.getElementById('sfx-hover');

@@ -208,81 +208,6 @@
             flex-direction: column;
         }
 
-        /* Audio Controls */
-        .audio-controls {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-light);
-            border-radius: 12px;
-            padding: 12px 20px;
-            backdrop-filter: blur(10px);
-            z-index: 100;
-            transition: all 0.3s ease;
-        }
-
-        .audio-controls:hover {
-            border-color: var(--stranger-red);
-            box-shadow: 0 8px 30px rgba(230, 36, 41, 0.2);
-        }
-
-        .audio-btn {
-            width: 40px;
-            height: 40px;
-            background: var(--bg-tertiary);
-            border: 1px solid var(--border-subtle);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 18px;
-        }
-
-        .audio-btn:hover {
-            background: var(--stranger-red);
-            border-color: var(--stranger-red);
-        }
-
-        .audio-btn.playing {
-            background: var(--stranger-red);
-            border-color: var(--stranger-red);
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(230, 36, 41, 0.4); }
-            50% { box-shadow: 0 0 0 10px rgba(230, 36, 41, 0); }
-        }
-
-        .volume-slider {
-            width: 100px;
-            height: 4px;
-            background: var(--border-subtle);
-            border-radius: 2px;
-            cursor: pointer;
-            position: relative;
-        }
-
-        .volume-fill {
-            height: 100%;
-            background: var(--stranger-red);
-            border-radius: 2px;
-            width: 50%;
-            transition: width 0.2s ease;
-        }
-
-        .audio-label {
-            font-size: 12px;
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
-
         /* Header */
         header {
             text-align: center;
@@ -451,15 +376,23 @@
         }
 
         .character-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--stranger-red), var(--upside-down-teal));
+            width: 120px;
+            height: 120px;
             border-radius: 50%;
             margin: 0 auto 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 24px;
+            overflow: hidden;
+            border: 3px solid var(--stranger-red);
+            box-shadow: 0 0 15px rgba(230, 36, 41, 0.3);
+        }
+
+        .character-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .character-name {
@@ -649,17 +582,6 @@
         </button>
     </div>
 
-    <!-- Audio Controls -->
-    <div class="audio-controls">
-        <div class="audio-btn" id="play-pause-btn" title="Play/Pause">
-            ▶️
-        </div>
-        <span class="audio-label">Music</span>
-        <div class="volume-slider" id="volume-slider">
-            <div class="volume-fill" id="volume-fill"></div>
-        </div>
-    </div>
-
     <div class="container">
         <header>
             <span class="series-tag">Netflix Original Series</span>
@@ -696,24 +618,32 @@
         <h2 class="section-title">Main Characters</h2>
         <div class="bento-grid">
         <div class="character-card reveal bento-hero">
-        <div class="character-icon">👧</div>
-        <div class="character-name">Eleven</div>
-        <div class="character-role">The Psychic Hero</div>
+            <div class="character-icon">
+                <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/7SIsC2vVjD06NExL0I63YmD7O1K.jpg" alt="Eleven">
+            </div>
+            <div class="character-name">Eleven</div>
+            <div class="character-role">The Psychic Hero</div>
         </div>
         <div class="character-card reveal">
-        <div class="character-icon">👦</div>
-        <div class="character-name">Mike Wheeler</div>
-        <div class="character-role">The Leader</div>
+            <div class="character-icon">
+                <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/S8T26fHScU7lSxtVpD6hT6eA6Wn.jpg" alt="Mike Wheeler">
+            </div>
+            <div class="character-name">Mike Wheeler</div>
+            <div class="character-role">The Leader</div>
         </div>
         <div class="character-card reveal">
-        <div class="character-icon">🚲</div>
-        <div class="character-name">Dustin Henderson</div>
-        <div class="character-role">The Smart One</div>
+            <div class="character-icon">
+                <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/4FwHIKR4YF209qEUT98Y0CypS2s.jpg" alt="Dustin Henderson">
+            </div>
+            <div class="character-name">Dustin Henderson</div>
+            <div class="character-role">The Smart One</div>
         </div>
         <div class="character-card reveal bento-wide">
-        <div class="character-icon">🎸</div>
-        <div class="character-name">Will Byers</div>
-        <div class="character-role">The Survivor</div>
+            <div class="character-icon">
+                <img src="https://www.themoviedb.org/t/p/w600_and_h900_bestv2/vA26IuE9it5jL3I4Xy0rP7f07B8.jpg" alt="Will Byers">
+            </div>
+            <div class="character-name">Will Byers</div>
+            <div class="character-role">The Survivor</div>
         </div>
         </div>
         </section>

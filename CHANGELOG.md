@@ -2,6 +2,11 @@
 
 All notable changes to the Stranger Things Tribute Page will be documented in this file.
 
+## [Unreleased] - 2026-07-04
+
+### Added
+- Meta description and theme-color tags for browser chrome
+
 ## [1.0.0] - 2025-01-01
 
 ### Added
